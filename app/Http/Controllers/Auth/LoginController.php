@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
+use Socialite;
+use App\User;
+use App\SocialIdentity;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -47,7 +51,7 @@ class LoginController extends Controller
         try {
             $user = Socialite::driver($provider)->user();
         } catch (Exception $e) {
-            return redirect('auth/'.$provider);
+            return redirect('/login');
         }
 
         $authUser = $this->findOrCreateUser($user, $provider);
@@ -56,26 +60,26 @@ class LoginController extends Controller
     }
 
 
-    public function findOrCreate($user, $provider)
+    public function findOrCreateUser($providerUser, $provider)
     {
         $account = SocialIdentity::whereProviderName($provider)
-                   ->whereProviderId($user->getId())
+                   ->whereProviderId($providerUser->getId())
                    ->first();
 
         if ($account) {
             return $account->user;
         } else {
-            $user = User::whereEmail($user->getEmail())->first();
+            $user = User::whereEmail($providerUser->getEmail())->first();
 
             if (! $user) {
                 $user = User::create([
-                    'email' => $user->getEmail(),
-                    'name'  => $user->getName(),
+                    'email' => $providerUser->getEmail(),
+                    'name'  => $providerUser->getName(),
                 ]);
             }
 
-            $user->socialAccounts()->create([
-                'provider_id'   => $user->getId(),
+            $user->identities()->create([
+                'provider_id'   => $providerUser->getId(),
                 'provider_name' => $provider,
             ]);
 

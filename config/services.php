@@ -42,12 +42,12 @@ return [
     ],
 
     'twitter' => [
-        'client_id' => env('FACEBOOK_CLIENT_ID'),        // Your Twitter Client ID
-        'client_secret' => env('FACEBOOK_CLIENT_SECRET'), // Your Twitter Client Secret
-        'redirect' => env('FACEBOOK_URL'),
+        'client_id' => env('TWITTER_CLIENT_ID'),        // Your Twitter Client ID
+        'client_secret' => env('TWITTER_CLIENT_SECRET'), // Your Twitter Client Secret
+        'redirect' => env('TWITTER_URL'),
     ],
 
-    'facebook' => [
+    'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),        // Your Github Client ID
         'client_secret' => env('GITHUB_CLIENT_SECRET'), // Your Github Client Secret
         'redirect' => env('GITHUB_URL'),
